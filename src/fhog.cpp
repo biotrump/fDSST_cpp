@@ -503,6 +503,8 @@ cv::Mat fhog(const cv::Mat& input, int binSize, int nOrients, float clip, bool c
     change_format(H,HH,d,w,h);
 
     cv::Mat fhog_feature(h,w,CV_32FC(32),H);
+	cv::Mat out = fhog_feature.clone();
     delete II;delete I;delete HH;
-    return fhog_feature;
+	delete H;
+    return out;
 }

@@ -212,7 +212,7 @@ FDSSTTracker::FDSSTTracker(bool hog, bool fixed_window, bool multiscale, bool la
 
     if (hog) {    // HOG
         // VOT
-        interp_factor = 0.012;
+        interp_factor = 0.015;
         sigma = 0.6;
         // TPAMI
         //interp_factor = 0.02;
@@ -253,7 +253,7 @@ FDSSTTracker::FDSSTTracker(bool hog, bool fixed_window, bool multiscale, bool la
         template_size = 96;
         //scale parameters initial
         scale_padding = 1.0;
-        scale_step = 1.02;
+        scale_step = 1.05;
         scale_sigma_factor = 1.0 / 16;
 
 		n_scales = 9;
@@ -337,10 +337,13 @@ cv::Rect FDSSTTracker::update(cv::Mat image)
 	std::cout << "scale detction duration: " << (t_end - t_start) / CLOCKS_PER_SEC << "\n";
 #endif  
 	currentScaleFactor = currentScaleFactor * interp_scaleFactors[scale_pi.x];
+//	std::cout << currentScaleFactor<<"\n";
     if(currentScaleFactor < min_scale_factor)
       currentScaleFactor = min_scale_factor;
     // else if(currentScaleFactor > max_scale_factor)
     //   currentScaleFactor = max_scale_factor;
+
+	update_roi();
 
     train_scale(image);
 
@@ -429,6 +432,8 @@ cv::Point2f FDSSTTracker::detect(cv::Mat x, float &peak_value)
 	if (pi.y > 0 && pi.y < res.rows - 1) {
 		p.y += subPixelPeak(res.at<float>(pi.y - 1, pi.x), peak_value, res.at<float>(pi.y + 1, pi.x));
 	}
+
+
 
 	p.x -= (res.cols) / 2;
 	p.y -= (res.rows) / 2;
