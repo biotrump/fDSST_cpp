@@ -12,7 +12,7 @@
 #include "fdssttracker.hpp"
 
 
-#include <windows.h>
+//#include <windows.h>
 //#include <dirent.h>
 
 
@@ -120,7 +120,7 @@ int main(int argc, char* argv[]){
 			showRect = initRect;
 		}
 		else{
-#ifndef WINDOWS
+#ifdef WINDOWS
 			LARGE_INTEGER t1, t2, tc;
 			QueryPerformanceFrequency(&tc);
 			QueryPerformanceCounter(&t1);
@@ -128,7 +128,7 @@ int main(int argc, char* argv[]){
 			cv::Mat img;
 			cv::cvtColor(show_img, img, cv::COLOR_RGB2GRAY);
 			showRect = tracker.update(img);
-#ifndef WINDOWS
+#ifdef WINDOWS
 			QueryPerformanceCounter(&t2);
 			printf("Use Time : %f\n", (t2.QuadPart - t1.QuadPart)*1.0 / tc.QuadPart);
 			time_sum += ((t2.QuadPart - t1.QuadPart)*1.0 / tc.QuadPart);
